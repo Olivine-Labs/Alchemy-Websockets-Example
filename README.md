@@ -7,7 +7,7 @@ Install or build and run the server source and run the chat.html file. Note:
 flash websockets doesn't appear to work locally; test it in a websocket-enabled
 browser or host a server elsewhere and connect to it over IP / username.
 
-You can connect to chat.alchemywebsockets.net for a test server as well.
+You can connect to server.alchemywebsockets.net for a test server as well.
 
 Feel free to try out the online example at [chat.alchemywebsockets.net](http://chat.alchemywebsockets.net)
 
