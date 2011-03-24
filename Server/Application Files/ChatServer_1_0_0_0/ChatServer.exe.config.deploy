@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2011 Olivine Labs, LLC. http://olivinelabs.com
+Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+-->
+<configuration>
+  <startup>
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0"/>
+  </startup>
+</configuration>

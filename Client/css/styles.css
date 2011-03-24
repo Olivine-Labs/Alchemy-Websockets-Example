@@ -1,0 +1,26 @@
+/*
+Copyright 2011 Olivine Labs, LLC. <http://olivinelabs.com>
+Licensed under the MIT license: <http://www.opensource.org/licenses/mit-license.php>
+*/
+
+html { font-family: Georgia, Serif; }
+footer { text-align: center; font-style: italic; color: #999; font-size: 12pt; border-top: solid 1px #aaa; padding: 1em 0; margin-top: 2em; }
+
+h1, h2 { font-family: Helvetica, Arial, Sans-Serif; line-height: 1.5em; }
+h1 { font-size: 32pt; color: #00b0d8; text-shadow: 0 1px 1px #666; }
+h2, section h1 { font-size: 12pt;  }
+header h1 { margin: 0; }
+
+pre { border: solid #666 dashed; background-color: #ddf; }
+
+#status { color: #fff; padding: 3px; }
+.offline { background-color: #900; }
+.pending { background-color: #666; }
+.online { background-color: #090; }
+
+#message { width: 300px; }
+#port { width: 5em; }
+#chat h1 { display: none; }
+#chat p { margin :0 0 .25em 0; padding: .25em; }
+#chat p:nth-child(even){ background-color: #eee; }
+#poweredBy { float: right; display: block; background: transparent url('images/poweredby.png') top left no-repeat; width:191px; height: 72px; overflow: hidden; text-indent: 100000px; line-height: 4em; }
