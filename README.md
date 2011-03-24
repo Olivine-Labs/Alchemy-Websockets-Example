@@ -9,6 +9,8 @@ browser or host a server elsewhere and connect to it over IP / username.
 
 You can connect to chat.alchemywebsockets.net for a test server as well.
 
+Feel free to try out the online example at [chat.alchemywebsockets.net](http://chat.alchemywebsockets.net)
+
 Usage
 -------
 Enter in a server name and port (or used the pre-filled defaults.) Click
