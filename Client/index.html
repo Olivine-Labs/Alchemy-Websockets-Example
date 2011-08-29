@@ -20,67 +20,69 @@ Used under BSD-new license without permission or endorsement from the author.
     </head> 
  
     <body> 
-        <div class="container_12"> 
-            <header class="grid_12"> 
-				<h1>Alchemy WebSockets Chat Server Test</h1> 
-				<h2>Status: <span id="status" class="offline">Offline</span> <button id="disconnect">Disconnect</button></h2>
-			</header> 
-        </div> 
- 
-        <div class="clear"></div> 
- 
-        <div class="container_12"> 
-			<section class="grid_12"> 
-				<form id="connectToServer" method="get" action="sockets.html">
-					<fieldset title="Connect to Server"> 
-					<legend>Connect to Server</legend> 
-					Server: <input id="server" value="chat.alchemywebsockets.net" /> : <input id="port" value="81" />
-					<button id="connect" type="submit">Connect</button>
-					</fieldset>
-				</form>
-				
-				<br /> 
-				
-				<form id="registerName" method="get" action="sockets.html" style="display: none;"> 
-					<fieldset title="Register Username"> 
-					<legend>Register Username</legend> 
-					<input id="name" />
-					<button id="register" type="submit">Register</button> 
-					</fieldset>	
-				</form> 
-				
-				<form id="sendMessage" method="get" action="sockets.html" style="display: none;"> 
-					<fieldset title="Chat"> 
-					<legend>Chat</legend> 
-					<input id="message" type="text" />
-					<button id="send" type="submit">Send</button> 
-					</fieldset>	
-				</form> 
-			</section>
- 
-        	<div class="clear"></div>
-        
-			<section id="chat" class="grid_12">
-				<h1>Chat</h1>
-				<span>Users online: <span id="onlineUsers">???</span></span><br />
-				<pre id="results"></pre> 
-			</section>
-        </div> 
- 
-        <div class="clear"></div> 
- 
-        <div class="container_12"> 
-            <footer class="grid_12"> 
-				<a href="http://www.olivinelabs.com/index.php/projects/71-alchemy-websockets" id="poweredBy" target="_blank">Powered by Alchemy Websockets</a>
-			</footer> 
-        </div> 
- 
-        <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.5.1.min.js"></script> 
-        <script src="js/json2.js"></script> 
+      <div class="container_12"> 
+        <header class="grid_12"> 
+          <h1>Alchemy WebSockets Chat Server Test</h1> 
+          <h2>Status: <span id="status" class="offline">Offline</span> <button id="disconnect">Disconnect</button></h2>
+        </header> 
+      </div> 
+
+      <div class="clear"></div> 
+
+      <div class="container_12"> 
+        <section class="grid_12"> 
+          <form id="connectToServer" method="get" action="sockets.html">
+            <fieldset title="Connect to Server"> 
+            <legend>Connect to Server</legend> 
+            Server: <input id="server" value="chat.alchemywebsockets.net" /> : <input id="port" value="81" />
+            <button id="connect" type="submit">Connect</button>
+            </fieldset>
+          </form>
+          
+          <br /> 
+          
+          <form id="registerName" method="get" action="sockets.html" style="display: none;"> 
+            <fieldset title="Register Username"> 
+            <legend>Register Username</legend> 
+            <input id="name" />
+            <button id="register" type="submit">Register</button> 
+            </fieldset>	
+          </form> 
+          
+          <form id="sendMessage" method="get" action="sockets.html" style="display: none;"> 
+            <fieldset title="Chat"> 
+            <legend>Chat</legend> 
+            <input id="message" type="text" />
+            <button id="send" type="submit">Send</button> 
+            </fieldset>	
+          </form> 
+        </section>
+
+        <div class="clear"></div>
+      
+        <section id="chat" class="grid_12">
+          <h1>Chat</h1>
+          <span>Users online: <span id="onlineUsers">???</span></span><br />
+          <pre id="results"></pre> 
+        </section>
+      </div> 
+
+      <div class="clear"></div> 
+
+      <div class="container_12"> 
+        <footer class="grid_12"> 
+          <a href="http://www.olivinelabs.com/index.php/projects/71-alchemy-websockets" id="poweredBy" target="_blank">Powered by Alchemy Websockets</a>
+        </footer> 
+      </div> 
+
+      <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.5.1.min.js"></script> 
+      <script src="js/json2.js"></script> 
 
   		<script src="js/swfobject.js"></script>
   		<script src="js/web_socket.js"></script>
-		<script src="js/alchemy-client.js"></script> 
-		<script src="js/startup.js"></script> 
+      <script src="js/alchemy-client.js"></script> 
+      
+      <!-- this is the demo code -->
+      <script src="js/startup.js"></script> 
     </body> 
 </html> 

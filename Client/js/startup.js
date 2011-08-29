@@ -3,11 +3,16 @@ Copyright 2011 Olivine Labs, LLC. <http://olivinelabs.com>
 Licensed under the MIT license: <http://www.opensource.org/licenses/mit-license.php>
 */
 
-(function() {
+(function(window, $) {
   // Set URL of your WebSocketMain.swf here, for web-socket-js
   WEB_SOCKET_SWF_LOCATION = 'js/WebSocketMainInsecure.swf';
   var AlchemyChatServer = {};
   var me = {};
+
+  //stupid firefox
+  if(window.MozWebSocket !== undefined){
+    window.WebSocket = window.MozWebSocket;
+  }
 
   function Connect() {
 
@@ -21,7 +26,7 @@ Licensed under the MIT license: <http://www.opensource.org/licenses/mit-license.
     AlchemyChatServer = new Alchemy({
       Server: $('#server').val(),
       Action: 'chat',
-      DebugMode: false
+      DebugMode: true
     });
 
     LogMessage('Connecting...');
@@ -144,4 +149,4 @@ Licensed under the MIT license: <http://www.opensource.org/licenses/mit-license.
       AlchemyChatServer.Stop();
     });
   });
-})(window, undefined);
+})(window, jQuery);
