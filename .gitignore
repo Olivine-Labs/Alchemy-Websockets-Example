@@ -1,3 +1,5 @@
 *.swp
 *.swo
 .DS_Store
+Server/src/bin
+Server/src/obj
