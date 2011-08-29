@@ -9,11 +9,6 @@ Licensed under the MIT license: <http://www.opensource.org/licenses/mit-license.
   var AlchemyChatServer = {};
   var me = {};
 
-  //stupid firefox
-  if(window.MozWebSocket !== undefined){
-    window.WebSocket = window.MozWebSocket;
-  }
-
   function Connect() {
 
     // If we're using the Flash fallback, we need Flash.
