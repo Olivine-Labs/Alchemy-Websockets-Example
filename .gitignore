@@ -1,5 +1,13 @@
 *.swp
+
 *.swo
+
 .DS_Store
+
 Server/src/bin
+
 Server/src/obj
+
+Server/src/_ReSharper*
+*.pidb
+*.userprefs
