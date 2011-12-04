@@ -14,11 +14,11 @@ Used under BSD-new license without permission or endorsement from the author.
         <meta charset="utf-8"> 
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
         <title>Alchemy WebSockets Chat Server Test</title> 		
-		<link href="css/grid.css" rel="stylesheet" /> 
-		<link href="css/styles.css" rel="stylesheet" /> 
-		<script src="js/modernizr-1.7.min.js"></script>
+    <link href="css/grid.css" rel="stylesheet" /> 
+    <link href="css/styles.css" rel="stylesheet" /> 
+    <script src="js/modernizr-1.7.min.js"></script>
     </head> 
- 
+
     <body> 
       <div class="container_12"> 
         <header class="grid_12"> 
@@ -38,9 +38,9 @@ Used under BSD-new license without permission or endorsement from the author.
             <button id="connect" type="submit">Connect</button>
             </fieldset>
           </form>
-          
+
           <br /> 
-          
+
           <form id="registerName" method="get" action="sockets.html" style="display: none;"> 
             <fieldset title="Register Username"> 
             <legend>Register Username</legend> 
@@ -48,7 +48,7 @@ Used under BSD-new license without permission or endorsement from the author.
             <button id="register" type="submit">Register</button> 
             </fieldset>	
           </form> 
-          
+
           <form id="sendMessage" method="get" action="sockets.html" style="display: none;"> 
             <fieldset title="Chat"> 
             <legend>Chat</legend> 
@@ -59,30 +59,30 @@ Used under BSD-new license without permission or endorsement from the author.
         </section>
 
         <div class="clear"></div>
-      
+
         <section id="chat" class="grid_12">
           <h1>Chat</h1>
           <span>Users online: <span id="onlineUsers">???</span></span><br />
           <pre id="results"></pre> 
-        </section>
-      </div> 
+          </section>
+        </div> 
 
-      <div class="clear"></div> 
+        <div class="clear"></div> 
 
-      <div class="container_12"> 
-        <footer class="grid_12"> 
+        <div class="container_12"> 
+          <footer class="grid_12"> 
           <a href="http://www.olivinelabs.com/index.php/projects/71-alchemy-websockets" id="poweredBy" target="_blank">Powered by Alchemy Websockets</a>
-        </footer> 
-      </div> 
+          </footer> 
+        </div> 
 
-      <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.5.1.min.js"></script> 
-      <script src="js/json2.js"></script> 
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.7.1.min.js"></script> 
+        <script src="js/json2.js"></script> 
 
-  		<script src="js/swfobject.js"></script>
-  		<script src="js/web_socket.js"></script>
-      <script src="js/alchemy-client.js"></script> 
-      
-      <!-- this is the demo code -->
-      <script src="js/startup.js"></script> 
-    </body> 
-</html> 
+        <script src="js/swfobject.js"></script>
+        <script src="js/web_socket.js"></script>
+        <script src="js/alchemy-client.js"></script> 
+
+        <!-- this is the demo code -->
+        <script src="js/startup.js"></script> 
+      </body> 
+    </html> 

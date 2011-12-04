@@ -20,6 +20,7 @@ Licensed under the MIT license: <http://www.opensource.org/licenses/mit-license.
     // Set up the Alchemy client object
     AlchemyChatServer = new Alchemy({
       Server: $('#server').val(),
+      Port: $('#port').val(),
       Action: 'chat',
       DebugMode: true
     });
