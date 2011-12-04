@@ -4,15 +4,21 @@ Licensed under the MIT license: <http://www.opensource.org/licenses/mit-license.
 */
 
 (function(window, $) {
+  Modernizr.load({
+    test: Modernizr.websockets,
+    nope: 'web_socket.js'
+  });
+
   // Set URL of your WebSocketMain.swf here, for web-socket-js
   WEB_SOCKET_SWF_LOCATION = 'js/WebSocketMainInsecure.swf';
   var AlchemyChatServer = {};
   var me = {};
 
   function Connect() {
-
     // If we're using the Flash fallback, we need Flash.
+    console.log(window.WebSocket);
     if (!window.WebSocket && !swfobject.hasFlashPlayerVersion('10.0.0')) {
+      console.log(window.WebSocket);
       alert('Flash Player >= 10.0.0 is required.');
       return;
     }

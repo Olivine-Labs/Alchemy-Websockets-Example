@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 (function() {
   function Alchemy(options) {
+    
+
     // thanks, John. http://ejohn.org/blog/simple-class-instantiation/
     if (!this instanceof Alchemy) {
       return new Alchemy(options);
@@ -209,4 +211,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   window.Alchemy = Alchemy;
   window.MergeDefaults = MergeDefaults;
+
+  if(window.MozWebSocket){
+    window.WebSocket = MozWebSocket;
+  }
 })(window);
