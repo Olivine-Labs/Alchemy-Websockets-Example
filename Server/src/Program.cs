@@ -42,7 +42,7 @@ namespace ChatServer
         static void Main(string[] args)
         {
             // Initialize the server on port 8100, accept any IPs, and bind events.
-            var aServer = new WSServer(8100, IPAddress.Any)
+            var aServer = new WebSocketServer(81, IPAddress.Any)
                               {
                                   DefaultOnReceive = new OnEventDelegate(OnReceive),
                                   DefaultOnSend = new OnEventDelegate(OnSend),
