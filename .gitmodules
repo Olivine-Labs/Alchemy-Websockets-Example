@@ -4,3 +4,6 @@
 [submodule "Server/src/Libraries/Alchemy-Websockets"]
 	path = Server/src/Libraries/Alchemy-Websockets
 	url = https://github.com/Olivine-Labs/Alchemy-Websockets.git
+[submodule "Client/js/alchemy-websockets-client"]
+	path = Client/js/alchemy-websockets-client
+	url = git://github.com/Olivine-Labs/Alchemy-Websockets-Client-Library.git
