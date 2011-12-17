@@ -7,11 +7,11 @@ Licensed under the MIT license: <http://www.opensource.org/licenses/mit-license.
 
   Modernizr.load({
     test: Modernizr.websockets,
-    nope: 'js/web_socket.js'
+    nope: 'js/web-socket-js/web_socket.js'
   });
 
   // Set URL of your WebSocketMain.swf here, for web-socket-js
-  WEB_SOCKET_SWF_LOCATION = 'js/WebSocketMain.swf';
+  WEB_SOCKET_SWF_LOCATION = 'js/web-socket-js/WebSocketMain.swf';
   WEB_SOCKET_DEBUG = true;
 
   var AlchemyChatServer = {};
