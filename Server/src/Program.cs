@@ -19,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Alchemy.Server;
-using Alchemy.Server.Classes;
+using Alchemy;
+using Alchemy.Classes;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -46,7 +46,7 @@ namespace ChatServer
                               {
                                   DefaultOnReceive = new OnEventDelegate(OnReceive),
                                   DefaultOnSend = new OnEventDelegate(OnSend),
-                                  DefaultOnConnect = new OnEventDelegate(OnConnect),
+                                  DefaultOnConnected = new OnEventDelegate(OnConnect),
                                   DefaultOnDisconnect = new OnEventDelegate(OnDisconnect),
                                   TimeOut = new TimeSpan(0, 5, 0)
                               };
