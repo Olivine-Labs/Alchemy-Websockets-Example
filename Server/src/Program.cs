@@ -19,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Alchemy;
-using Alchemy.Classes;
+using Alchemy.Server;
+using Alchemy.Server.Classes;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -41,13 +41,13 @@ namespace ChatServer
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            // Initialize the server on port 8100, accept any IPs, and bind events.
+            // Initialize the server on port 81, accept any IPs, and bind events.
             var aServer = new WebSocketServer(81, IPAddress.Any)
                               {
-                                  DefaultOnReceive = new OnEventDelegate(OnReceive),
-                                  DefaultOnSend = new OnEventDelegate(OnSend),
-                                  DefaultOnConnected = new OnEventDelegate(OnConnect),
-                                  DefaultOnDisconnect = new OnEventDelegate(OnDisconnect),
+                                  DefaultOnReceive = OnReceive,
+                                  DefaultOnSend = OnSend,
+                                  DefaultOnConnected = OnConnect,
+                                  DefaultOnDisconnect = OnDisconnect,
                                   TimeOut = new TimeSpan(0, 5, 0)
                               };
 
@@ -67,12 +67,12 @@ namespace ChatServer
         /// Event fired when a client connects to the Alchemy Websockets server instance.
         /// Adds the client to the online users list.
         /// </summary>
-        /// <param name="aContext">The user's connection context</param>
-        public static void OnConnect(UserContext aContext)
+        /// <param name="context">The user's connection context</param>
+        public static void OnConnect(UserContext context)
         {
-            Console.WriteLine("Client Connection From : " + aContext.ClientAddress.ToString());
+            Console.WriteLine("Client Connection From : " + context.ClientAddress.ToString());
 
-            var me = new User {Context = aContext};
+            var me = new User {Context = context};
 
             OnlineUsers.Add(me);
         }
@@ -81,36 +81,36 @@ namespace ChatServer
         /// Event fired when a data is received from the Alchemy Websockets server instance.
         /// Parses data as JSON and calls the appropriate message or sends an error message.
         /// </summary>
-        /// <param name="aContext">The user's connection context</param>
-        public static void OnReceive(UserContext aContext)
+        /// <param name="context">The user's connection context</param>
+        public static void OnReceive(UserContext context)
         {
-            Console.WriteLine("Received Data From :" + aContext.ClientAddress.ToString());
+            Console.WriteLine("Received Data From :" + context.ClientAddress);
 
             try
             {
-                var json = aContext.DataFrame.ToString();
+                var json = context.DataFrame.ToString();
 
                 // <3 dynamics
                 dynamic obj = JsonConvert.DeserializeObject(json);
 
-                if ((int)obj.Type == (int)CommandType.Register)
+                switch ((int)obj.Type)
                 {
-                    Register(obj.Name.Value, aContext);
-                }
-                else if ((int)obj.Type == (int)CommandType.Message)
-                {
-                    ChatMessage(obj.Message.Value, aContext);
-                }
-                else if ((int)obj.Type == (int)CommandType.NameChange)
-                {
-                    NameChange(obj.Name.Value, aContext);
+                    case (int)CommandType.Register:
+                        Register(obj.Name.Value, context);
+                        break;
+                    case (int)CommandType.Message:
+                        ChatMessage(obj.Message.Value, context);
+                        break;
+                    case (int)CommandType.NameChange:
+                        NameChange(obj.Name.Value, context);
+                        break;
                 }
             }
             catch (Exception e) // Bad JSON! For shame.
             {
-                var r = new Response {Type = ResponseType.Error, Data = new {Message = e.Message}};
+                var r = new Response {Type = ResponseType.Error, Data = new {e.Message}};
 
-                aContext.Send(JsonConvert.SerializeObject(r));
+                context.Send(JsonConvert.SerializeObject(r));
             }
         }
 
@@ -118,10 +118,10 @@ namespace ChatServer
         /// Event fired when the Alchemy Websockets server instance sends data to a client.
         /// Logs the data to the console and performs no further action.
         /// </summary>
-        /// <param name="aContext">The user's connection context</param>
-        public static void OnSend(UserContext aContext)
+        /// <param name="context">The user's connection context</param>
+        public static void OnSend(UserContext context)
         {
-            Console.WriteLine("Data Send To : " + aContext.ClientAddress.ToString());
+            Console.WriteLine("Data Send To : " + context.ClientAddress);
         }
 
         // NOTE: This is not safe code. You may end up broadcasting to people who
@@ -132,17 +132,17 @@ namespace ChatServer
         /// Removes the user from the online users list and broadcasts the disconnection message
         /// to all connected users.
         /// </summary>
-        /// <param name="aContext">The user's connection context</param>
-        public static void OnDisconnect(UserContext aContext)
+        /// <param name="context">The user's connection context</param>
+        public static void OnDisconnect(UserContext context)
         {
-            Console.WriteLine("Client Disconnected : " + aContext.ClientAddress.ToString());
-            var user = OnlineUsers.Where(o => o.Context.ClientAddress == aContext.ClientAddress).Single();
+            Console.WriteLine("Client Disconnected : " + context.ClientAddress);
+            var user = OnlineUsers.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
 
             OnlineUsers.Remove(user);
 
             if (!String.IsNullOrEmpty(user.Name))
             {
-                var r = new Response {Type = ResponseType.Disconnect, Data = new {Name = user.Name}};
+                var r = new Response {Type = ResponseType.Disconnect, Data = new {user.Name}};
 
                 Broadcast(JsonConvert.SerializeObject(r));
             }
@@ -154,17 +154,17 @@ namespace ChatServer
         /// Register a user's context for the first time with a username, and add it to the list of online users
         /// </summary>
         /// <param name="name">The name to register the user under</param>
-        /// <param name="aContext">The user's connection context</param>
-        private static void Register(string name, UserContext aContext)
+        /// <param name="context">The user's connection context</param>
+        private static void Register(string name, UserContext context)
         {
-            var u = OnlineUsers.Where(o => o.Context.ClientAddress == aContext.ClientAddress).Single();
+            var u = OnlineUsers.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
             var r = new Response();
 
             if (ValidateName(name)) {
                 u.Name = name;
 
                 r.Type = ResponseType.Connection;
-                r.Data = new { Name = u.Name };
+                r.Data = new { u.Name };
 
                 Broadcast(JsonConvert.SerializeObject(r));
 
@@ -172,7 +172,7 @@ namespace ChatServer
             }
             else
             {
-               SendError("Name is of incorrect length.", aContext);
+               SendError("Name is of incorrect length.", context);
             }
         }
 
@@ -180,11 +180,11 @@ namespace ChatServer
         /// Broadcasts a chat message to all online usrs
         /// </summary>
         /// <param name="message">The chat message to be broadcasted</param>
-        /// <param name="aContext">The user's connection context</param>
-        private static void ChatMessage(string message, UserContext aContext)
+        /// <param name="context">The user's connection context</param>
+        private static void ChatMessage(string message, UserContext context)
         {
-            var u = OnlineUsers.Where(o => o.Context.ClientAddress == aContext.ClientAddress).Single();
-            var r = new Response {Type = ResponseType.Message, Data = new {Name = u.Name, Message = message}};
+            var u = OnlineUsers.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
+            var r = new Response {Type = ResponseType.Message, Data = new {u.Name, Message = message}};
 
             Broadcast(JsonConvert.SerializeObject(r));
 
@@ -193,28 +193,27 @@ namespace ChatServer
         /// <summary>
         /// Update a user's name if they sent a name-change command from the client.
         /// </summary>
-        /// <param name="Name">The name to be changed to</param>
-        /// <param name="AContext">The user's connection context</param>
-        private static void NameChange(string Name, UserContext AContext)
+        /// <param name="name">The name to be changed to</param>
+        /// <param name="aContext">The user's connection context</param>
+        private static void NameChange(string name, UserContext aContext)
         {
-            var u = OnlineUsers.Where(o => o.Context.ClientAddress == AContext.ClientAddress).Single();
-            Response r;
+            var u = OnlineUsers.Where(o => o.Context.ClientAddress == aContext.ClientAddress).Single();
 
-            if (ValidateName(Name)) { 
-                r = new Response
-                        {
-                            Type = ResponseType.NameChange,
-                            Data = new {Message = u.Name + " is now known as " + Name}
-                        };
+            if (ValidateName(name)) { 
+                var r = new Response
+                                 {
+                                     Type = ResponseType.NameChange,
+                                     Data = new {Message = u.Name + " is now known as " + name}
+                                 };
                 Broadcast(JsonConvert.SerializeObject(r));
 
-                u.Name = Name;
+                u.Name = name;
 
                 BroadcastNameList();
             }
             else
             {
-                SendError("Name is of incorrect length.", AContext);
+                SendError("Name is of incorrect length.", aContext);
             }
         }
 
@@ -222,12 +221,12 @@ namespace ChatServer
         /// Broadcasts an error message to the client who caused the error
         /// </summary>
         /// <param name="errorMessage">Details of the error</param>
-        /// <param name="aContext">The user's connection context</param>
-        private static void SendError(string errorMessage, UserContext aContext)
+        /// <param name="context">The user's connection context</param>
+        private static void SendError(string errorMessage, UserContext context)
         {
             var r = new Response {Type = ResponseType.Error, Data = new {Message = errorMessage}};
 
-            aContext.Send(JsonConvert.SerializeObject(r));
+            context.Send(JsonConvert.SerializeObject(r));
         }
 
         /// <summary>
@@ -248,23 +247,20 @@ namespace ChatServer
         /// </summary>
         /// <param name="message">Message to be broadcast</param>
         /// <param name="users">Optional list of users to broadcast to. If null, broadcasts to all. Defaults to null.</param>
-        private static void Broadcast(string message, IList<User> users = null)
+        private static void Broadcast(string message, ICollection<User> users = null)
         {
             if (users == null)
             {
-                foreach (User u in OnlineUsers)
+                foreach (var u in OnlineUsers)
                 {
                     u.Context.Send(message);
                 }
             }
             else
             {
-                foreach (User u in OnlineUsers)
+                foreach (var u in OnlineUsers.Where(users.Contains))
                 {
-                    if (users.Contains(u))
-                    {
-                        u.Context.Send(message);
-                    }
+                    u.Context.Send(message);
                 }
             }
         }
@@ -288,7 +284,7 @@ namespace ChatServer
         /// <summary>
         /// Defines the type of response to send back to the client for parsing logic
         /// </summary>
-        public enum ResponseType : int
+        public enum ResponseType
         {
             Connection = 0,
             Disconnect = 1,
@@ -319,7 +315,7 @@ namespace ChatServer
         /// <summary>
         /// Defines a type of command that the client sends to the server
         /// </summary>
-        public enum CommandType : int
+        public enum CommandType
         {
             Register = 0,
             Message,

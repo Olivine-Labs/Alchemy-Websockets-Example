@@ -8,12 +8,13 @@
     <ProjectGuid>{E63776FC-C35C-42EE-847E-5BD759476010}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OlivineLabs.Mobius.POCs.ChatServer.ChatServer</RootNamespace>
+    <RootNamespace>ChatServer</RootNamespace>
     <AssemblyName>ChatServer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,8 +26,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -116,9 +116,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Libraries\Alchemy-Websockets\src\Alchemy\Alchemy.csproj">
+    <ProjectReference Include="Libraries\Alchemy-Websockets\Server.csproj">
       <Project>{45486CDE-86A3-4769-952F-E0821BF79493}</Project>
-      <Name>Alchemy</Name>
+      <Name>Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
