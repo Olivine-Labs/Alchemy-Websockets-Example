@@ -17,6 +17,7 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Alchemy.Server;
@@ -28,12 +29,10 @@ namespace ChatServer
 {
     class Program
     {
-        // We'll just store a list of online users here. Keeping this IList here as it is
-        // isn't a good way to do things, as we're running in a multi-threaded environment. 
         /// <summary>
-        /// Store the list of online users
+        /// Store the list of online users. Wish I had a ConcurrentList. 
         /// </summary>
-        protected static IList<User> OnlineUsers = new List<User>();
+        protected static ConcurrentDictionary<User, string> OnlineUsers = new ConcurrentDictionary<User, string>();
 
         /// <summary>
         /// Initialize the application and start the Alchemy Websockets server
@@ -70,11 +69,11 @@ namespace ChatServer
         /// <param name="context">The user's connection context</param>
         public static void OnConnect(UserContext context)
         {
-            Console.WriteLine("Client Connection From : " + context.ClientAddress.ToString());
+            Console.WriteLine("Client Connection From : " + context.ClientAddress);
 
             var me = new User {Context = context};
 
-            OnlineUsers.Add(me);
+            OnlineUsers.TryAdd(me, String.Empty);
         }
 
         /// <summary>
@@ -124,9 +123,6 @@ namespace ChatServer
             Console.WriteLine("Data Send To : " + context.ClientAddress);
         }
 
-        // NOTE: This is not safe code. You may end up broadcasting to people who
-        // disconnected. Luckily for us, Alchemy handles exceptions in its event methods, so we don't
-        // have random, catastrophic changes.
         /// <summary>
         /// Event fired when a client disconnects from the Alchemy Websockets server instance.
         /// Removes the user from the online users list and broadcasts the disconnection message
@@ -136,9 +132,11 @@ namespace ChatServer
         public static void OnDisconnect(UserContext context)
         {
             Console.WriteLine("Client Disconnected : " + context.ClientAddress);
-            var user = OnlineUsers.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
+            var user = OnlineUsers.Keys.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
 
-            OnlineUsers.Remove(user);
+            string trash; // Concurrent dictionaries make things weird
+
+            OnlineUsers.TryRemove(user, out trash);
 
             if (!String.IsNullOrEmpty(user.Name))
             {
@@ -157,7 +155,7 @@ namespace ChatServer
         /// <param name="context">The user's connection context</param>
         private static void Register(string name, UserContext context)
         {
-            var u = OnlineUsers.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
+            var u = OnlineUsers.Keys.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
             var r = new Response();
 
             if (ValidateName(name)) {
@@ -169,6 +167,7 @@ namespace ChatServer
                 Broadcast(JsonConvert.SerializeObject(r));
 
                 BroadcastNameList();
+                OnlineUsers[u] = name;
             }
             else
             {
@@ -183,7 +182,7 @@ namespace ChatServer
         /// <param name="context">The user's connection context</param>
         private static void ChatMessage(string message, UserContext context)
         {
-            var u = OnlineUsers.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
+            var u = OnlineUsers.Keys.Where(o => o.Context.ClientAddress == context.ClientAddress).Single();
             var r = new Response {Type = ResponseType.Message, Data = new {u.Name, Message = message}};
 
             Broadcast(JsonConvert.SerializeObject(r));
@@ -197,7 +196,7 @@ namespace ChatServer
         /// <param name="aContext">The user's connection context</param>
         private static void NameChange(string name, UserContext aContext)
         {
-            var u = OnlineUsers.Where(o => o.Context.ClientAddress == aContext.ClientAddress).Single();
+            var u = OnlineUsers.Keys.Where(o => o.Context.ClientAddress == aContext.ClientAddress).Single();
 
             if (ValidateName(name)) { 
                 var r = new Response
@@ -208,6 +207,7 @@ namespace ChatServer
                 Broadcast(JsonConvert.SerializeObject(r));
 
                 u.Name = name;
+                OnlineUsers[u] = name;
 
                 BroadcastNameList();
             }
@@ -237,7 +237,7 @@ namespace ChatServer
             var r = new Response
                         {
                             Type = ResponseType.UserCount,
-                            Data = new {Users = OnlineUsers.Where(o => o.Name != null).Select(o => o.Name).ToArray()}
+                            Data = new {Users = OnlineUsers.Values.Where(o => !String.IsNullOrEmpty(o)).ToArray()}
                         };
             Broadcast(JsonConvert.SerializeObject(r));
         }
@@ -251,14 +251,14 @@ namespace ChatServer
         {
             if (users == null)
             {
-                foreach (var u in OnlineUsers)
+                foreach (var u in OnlineUsers.Keys)
                 {
                     u.Context.Send(message);
                 }
             }
             else
             {
-                foreach (var u in OnlineUsers.Where(users.Contains))
+                foreach (var u in OnlineUsers.Keys.Where(users.Contains))
                 {
                     u.Context.Send(message);
                 }
