@@ -20,8 +20,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Alchemy.Server;
-using Alchemy.Server.Classes;
+using Alchemy;
+using Alchemy.Classes;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -43,10 +43,10 @@ namespace ChatServer
             // Initialize the server on port 81, accept any IPs, and bind events.
             var aServer = new WebSocketServer(81, IPAddress.Any)
                               {
-                                  DefaultOnReceive = OnReceive,
-                                  DefaultOnSend = OnSend,
-                                  DefaultOnConnected = OnConnect,
-                                  DefaultOnDisconnect = OnDisconnect,
+                                  OnReceive = OnReceive,
+                                  OnSend = OnSend,
+                                  OnConnected = OnConnect,
+                                  OnDisconnect = OnDisconnect,
                                   TimeOut = new TimeSpan(0, 5, 0)
                               };
 

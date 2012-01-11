@@ -116,9 +116,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Libraries\Alchemy-Websockets\Server.csproj">
+    <ProjectReference Include="Libraries\Alchemy-Websockets\src\Alchemy\Alchemy.csproj">
       <Project>{45486CDE-86A3-4769-952F-E0821BF79493}</Project>
-      <Name>Server</Name>
+      <Name>Alchemy</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
